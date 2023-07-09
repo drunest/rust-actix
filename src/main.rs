@@ -9,8 +9,6 @@ mod utils;
 
 use repository::surrealdb_repo::SurrealDBRepo;
 
-use api::todo_api::{create_todo, get_todos, get_todo, update_todo, delete_todo};
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let surreal = match SurrealDBRepo::init().await {
@@ -29,11 +27,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(db_data.clone())
-            .service(create_todo) // Add
-            .service(get_todos) // Add
-            .service(get_todo) // Add
-            .service(update_todo) // Add
-            .service(delete_todo) // Add
+            .configure(api::config)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
