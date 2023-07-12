@@ -1,6 +1,7 @@
 // api/mod.rs
 use actix_web::web;
 pub mod item_api;
+pub mod user_api;
 
 pub fn config(conf: &mut web::ServiceConfig) {
   let scope = web::scope("/api")
@@ -8,7 +9,12 @@ pub fn config(conf: &mut web::ServiceConfig) {
       .service(item_api::get_item)
       .service(item_api::get_items)
       .service(item_api::update_item)
-      .service(item_api::delete_item);
+      .service(item_api::delete_item)
+      .service(user_api::create_user)
+      .service(user_api::get_user)
+      .service(user_api::get_users)
+      .service(user_api::update_user)
+      .service(user_api::delete_user);
 
   conf.service(scope);
 }
