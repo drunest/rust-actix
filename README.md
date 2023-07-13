@@ -212,5 +212,5 @@ curl --location --request DELETE 'http://localhost:8080/items/1'
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
 
