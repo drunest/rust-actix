@@ -1,7 +1,7 @@
 # BackEnd Project - Use Actix and SurrealDB to build a RESTful API
 
-[![Actix](https://img.shields.io/badge/Actix-2.0.0-blue.svg)](https://actix.rs/)
-[![SurrealDB](https://img.shields.io/badge/SurrealDB-0.1.0-blue.svg)](https://surrealdb.com)
+[![Actix](https://img.shields.io/badge/Actix-4.0.0-blue.svg)](https://actix.rs/)
+[![SurrealDB](https://img.shields.io/badge/SurrealDB-1.0.0-blue.svg)](https://surrealdb.com)
 
 ## Project Description
 
