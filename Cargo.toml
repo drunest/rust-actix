@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 surrealdb = "=1.0.0-beta.8"
 actix-web = "4"
-serde = { version = "1.0.136", features = ["derive"]}
+serde = { version = "1.0.171", features = ["derive"]}
 dotenv = "0.15.0"
 futures = "0.3"
 thiserror = "1"
