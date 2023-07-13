@@ -141,7 +141,7 @@ pub struct UserBMC;
 
 impl UserBMC {
   pub async fn get_all(db: Data<SurrealDBRepo>) -> Result<Vec<Object>, Error> {
-    let ast = "SELECT * FROM User;";
+    let ast = "SELECT * FROM user;";
 
     let res = db.ds.execute(ast, &db.ses, None, true).await?;
 
