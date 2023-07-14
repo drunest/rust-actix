@@ -11,16 +11,16 @@ It is a simple API that allows users to create, read, update, and delete users a
 ## Project Features
 
 - [x] Get all Users
-- [_] Get List of Users by parameters
-- [_] Get List of Users by IDs Array
+- [ ] Get List of Users by parameters
+- [ ] Get List of Users by IDs Array
 - [x] Create User
 - [x] Read User
 - [x] Update User
 - [x] Delete User
 
 - [x] Get all Items
-- [_] Get List of Items by parameters
-- [_] Get List of Items by IDs Array
+- [ ] Get List of Items by parameters
+- [ ] Get List of Items by IDs Array
 - [x] Create Item
 - [x] Read Item
 - [x] Update Item
