@@ -1,10 +1,11 @@
+// File: src/api/user_api.rs
 use actix_web::{
     delete, get, post, put,
     web::{Data, Json, Path},
     HttpResponse,
 };
 
-use crate::model::user_model::{User, UserBMC, UserPatch};
+use crate::model::user_model::{User, UserBMC, UserPatch, IdsArray};
 use crate::repository::surrealdb_repo::SurrealDBRepo;
 
 #[post("/users")]
@@ -102,6 +103,17 @@ pub async fn delete_user(db: Data<SurrealDBRepo>, path: Path<String>) -> HttpRes
 #[get("/users")]
 pub async fn get_users(db: Data<SurrealDBRepo>) -> HttpResponse {
     let result = UserBMC::get_all(db).await;
+
+    match result {
+        Ok(users) => HttpResponse::Ok().json(users),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
+}
+
+#[get("/usersByIds")]
+pub async fn search_users_by_ids(db: Data<SurrealDBRepo>, array_ids: Json<IdsArray>) -> HttpResponse {
+    let array_ids = array_ids.into_inner();
+    let result = UserBMC::search_by_ids(db, array_ids).await;
 
     match result {
         Ok(users) => HttpResponse::Ok().json(users),

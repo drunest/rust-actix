@@ -14,7 +14,8 @@ pub fn config(conf: &mut web::ServiceConfig) {
       .service(user_api::get_user)
       .service(user_api::get_users)
       .service(user_api::update_user)
-      .service(user_api::delete_user);
+      .service(user_api::delete_user)
+      .service(user_api::search_users_by_ids);
 
   conf.service(scope);
 }

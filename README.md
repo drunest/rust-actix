@@ -5,7 +5,35 @@
 
 ## Project Description
 
-This project is a RESTful API built with Actix and SurrealDB. It is a simple API that allows users to create, read, update, and delete users and items.
+This project is a RESTful API built with Actix and SurrealDB.
+It is a simple API that allows users to create, read, update, and delete users and items.
+
+## Project Features
+
+- [x] Get all Users
+- [_] Get List of Users by parameters
+- [_] Get List of Users by IDs Array
+- [x] Create User
+- [x] Read User
+- [x] Update User
+- [x] Delete User
+
+- [x] Get all Items
+- [_] Get List of Items by parameters
+- [_] Get List of Items by IDs Array
+- [x] Create Item
+- [x] Read Item
+- [x] Update Item
+- [x] Delete Item
+
+## Project Dependencies
+
+- [Actix](https://actix.rs/)
+- [SurrealDB](https://surrealdb.com)
+- [Actix Web](https://docs.rs/actix-web/4.0.0/actix_web/)
+- [Serde](https://docs.serde.rs/serde/)
+- [Dotenv](https://docs.rs/dotenv/0.15.0/dotenv/)
+- [Futures](https://docs.rs/futures/0.3.15/futures/)
 
 ## Project Structure
 

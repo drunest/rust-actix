@@ -137,6 +137,23 @@ impl From<UserPatch> for Value {
 
 impl Patchable for UserPatch {}
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct IdsArray {
+    ids: Vec<String>,
+}
+
+impl From<IdsArray> for Value {
+  fn from(val: IdsArray) -> Self {
+    let mut value = BTreeMap::new();
+
+    let ids: Vec<Value> = val.ids.into_iter().map(|id| Value::from(id)).collect();
+
+    value.insert("id".into(), Value::from(ids));
+
+    Value::from(value)
+  }
+}
+
 pub struct UserBMC;
 
 impl UserBMC {
@@ -144,6 +161,24 @@ impl UserBMC {
     let ast = "SELECT * FROM user;";
 
     let res = db.ds.execute(ast, &db.ses, None, true).await?;
+
+    let first_res = res.into_iter().next().expect("Did not get a response");
+
+    let array: Array = W(first_res.result?).try_into()?;
+
+    array.into_iter().map(|value| W(value).try_into()).collect()
+  }
+
+  pub async fn search_by_ids(db: Data<SurrealDBRepo>, ids: IdsArray) -> Result<Vec<Object>, Error> {
+    println!("{:?}", ids);
+    let ast = "SELECT * FROM user WHERE id INSIDE $ids;";
+
+    let vars: BTreeMap<String, Value> = map![
+      "ids".into() => ids.into(),
+    ];
+
+    let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+    println!("{:?}", res);
 
     let first_res = res.into_iter().next().expect("Did not get a response");
 

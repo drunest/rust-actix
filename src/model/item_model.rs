@@ -137,6 +137,21 @@ impl From<ItemPatch> for Value {
 
 impl Patchable for ItemPatch {}
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct IdsArray {
+    ids: Array,
+}
+
+impl From<IdsArray> for Value {
+    fn from(val: IdsArray) -> Self {
+        let mut value = BTreeMap::new();
+
+        value.insert("ids".into(), val.ids.into());
+
+        Value::from(value)
+    }
+}
+
 pub struct ItemBMC;
 
 impl ItemBMC {
@@ -144,6 +159,20 @@ impl ItemBMC {
     let ast = "SELECT * FROM item;";
 
     let res = db.ds.execute(ast, &db.ses, None, true).await?;
+
+    let first_res = res.into_iter().next().expect("Did not get a response");
+
+    let array: Array = W(first_res.result?).try_into()?;
+
+    array.into_iter().map(|value| W(value).try_into()).collect()
+  }
+
+  pub async fn search_by_ids(db: Data<SurrealDBRepo>, ids: IdsArray) -> Result<Vec<Object>, Error> {
+    let ast = "SELECT * FROM item WHERE id IN $ids;";
+
+    let vars: BTreeMap<String, Value> = map!["ids".into() => Value::from(ids)];
+
+    let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
 
     let first_res = res.into_iter().next().expect("Did not get a response");
 

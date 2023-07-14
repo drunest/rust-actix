@@ -4,7 +4,7 @@ use actix_web::{
   HttpResponse,
 };
 
-use crate::model::item_model::{Item, ItemBMC, ItemPatch};
+use crate::model::item_model::{Item, ItemBMC, ItemPatch, IdsArray};
 use crate::repository::surrealdb_repo::SurrealDBRepo;
 
 #[post("/items")]
@@ -107,4 +107,15 @@ pub async fn get_items(db: Data<SurrealDBRepo>) -> HttpResponse {
       Ok(items) => HttpResponse::Ok().json(items),
       Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
   }
+}
+
+#[get("/itemsByIds")]
+pub async fn search_items_by_ids(db: Data<SurrealDBRepo>, array_ids: Json<IdsArray>) -> HttpResponse {
+    let array_ids = array_ids.into_inner();
+    let result = ItemBMC::search_by_ids(db, array_ids).await;
+
+    match result {
+        Ok(items) => HttpResponse::Ok().json(items),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }
