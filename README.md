@@ -28,12 +28,15 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 ## Project Dependencies
 
-- [Actix](https://actix.rs/)
-- [SurrealDB](https://surrealdb.com)
-- [Actix Web](https://docs.rs/actix-web/4.0.0/actix_web/)
-- [Serde](https://docs.serde.rs/serde/)
-- [Dotenv](https://docs.rs/dotenv/0.15.0/dotenv/)
-- [Futures](https://docs.rs/futures/0.3.15/futures/)
+```toml
+[dependencies]
+surrealdb = "=1.0.0-beta.8"
+actix-web = "4"
+serde = { version = "1.0.171", features = ["derive"]}
+dotenv = "0.15.0"
+futures = "0.3"
+thiserror = "1"
+```
 
 ## Project Structure
 
@@ -103,25 +106,7 @@ curl --location --request GET 'http://localhost:8080/users'
 ```
 
 ```bash
-response: 200 OK
---data-response '[{
-    "id": "user:1",
-    "cid": "1",
-    "public_key": "0x1234567890",
-    "private_key": "0x1234567890",
-    "name": "John Doe",
-    "version": 1,
-    "avatar": "https://example.com/avatar.png",
-    "email": "john.doe@example.example",
-    "creation_date": "2020-01-01T00:00:00Z",
-    "online_state": "online",
-    "follow_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_inactive": false,
-  }]'
+response: 200 OK -- Users List
 ```
 
 #### Create User
@@ -149,25 +134,7 @@ curl --location --request POST 'http://localhost:8080/users' \
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "user:1",
-    "cid": "1",
-    "public_key": "0x1234567890",
-    "private_key": "0x1234567890",
-    "name": "John Doe",
-    "version": 1,
-    "avatar": "https://example.com/avatar.png",
-    "email": "john.doe@example.example",
-    "creation_date": "2020-01-01T00:00:00Z",
-    "online_state": "online",
-    "follow_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_inactive": false,
-  }'
+response: 200 OK -- User Created
 ```
 
 
@@ -178,25 +145,7 @@ curl --location --request GET 'http://localhost:8080/users/1'
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "user:1",
-    "cid": "1",
-    "public_key": "0x1234567890",
-    "private_key": "0x1234567890",
-    "name": "John Doe",
-    "version": 1,
-    "avatar": "https://example.com/avatar.png",
-    "email": "john.doe@example.example",
-    "creation_date": "2020-01-01T00:00:00Z",
-    "online_state": "online",
-    "follow_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_inactive": false,
-  }'
+response: 200 OK -- User
 ```
 
 #### Update User
@@ -224,25 +173,7 @@ curl --location --request PUT 'http://localhost:8080/users/1' \
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "user:1",
-    "cid": "1",
-    "public_key": "0x1234567890",
-    "private_key": "0x1234567890",
-    "name": "John Doe",
-    "version": 1,
-    "avatar": "https://example.com/avatar.png",
-    "email": "john.doe@example.example",
-    "creation_date": "2020-01-01T00:00:00Z",
-    "online_state": "online",
-    "follow_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_inactive": false,
-  }'
+response: 200 OK -- User Updated
 ```
 
 #### Delete User
@@ -252,8 +183,7 @@ curl --location --request DELETE 'http://localhost:8080/users/1'
 ```
 
 ```bash
-response: 200 OK
---data-response '"user:1"'
+response: 200 OK -- User:id Deleted
 ```
 
 
@@ -266,27 +196,7 @@ curl --location --request GET 'http://localhost:8080/items'
 ```
 
 ```bash
-response: 200 OK
---data-response '[{
-    "id": "1",
-    "cid": "1",
-    "name": "Item 1",
-    "owner_id": "1",
-    "version": 1,
-    "content": [ "1", "2", "3" ],
-    "creation_date": "2020-01-01T00:00:00Z",
-    "edit_date": "2020-01-01T00:00:00Z",
-    "tag_ids": [
-        "2",
-        "3"
-    ],
-    "follower_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_archived": false,
-  }]'
+response: 200 OK -- Items List
 ```
 
 #### Create Item
@@ -316,27 +226,7 @@ curl --location --request POST 'http://localhost:8080/items' \
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "1",
-    "cid": "1",
-    "name": "Item 1",
-    "owner_id": "1",
-    "version": 1,
-    "content": [ "1", "2", "3" ],
-    "creation_date": "2020-01-01T00:00:00Z",
-    "edit_date": "2020-01-01T00:00:00Z",
-    "tag_ids": [
-        "2",
-        "3"
-    ],
-    "follower_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_archived": false,
-  }'
+response: 200 OK -- Item Created
 ```
 
 #### Get Item
@@ -346,27 +236,7 @@ curl --location --request GET 'http://localhost:8080/items/1'
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "1",
-    "cid": "1",
-    "name": "Item 1",
-    "owner_id": "1",
-    "version": 1,
-    "content": [ "1", "2", "3" ],
-    "creation_date": "2020-01-01T00:00:00Z",
-    "edit_date": "2020-01-01T00:00:00Z",
-    "tag_ids": [
-        "2",
-        "3"
-    ],
-    "follower_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_archived": false,
-  }'
+response: 200 OK -- Item
 ```
 
 #### Update Item
@@ -396,27 +266,7 @@ curl --location --request PUT 'http://localhost:8080/items/1' \
 ```
 
 ```bash
-response: 200 OK
---data-response '{
-    "id": "1",
-    "cid": "1",
-    "name": "Item 1",
-    "owner_id": "1",
-    "version": 1,
-    "content": [ "1", "2", "3" ],
-    "creation_date": "2020-01-01T00:00:00Z",
-    "edit_date": "2020-01-01T00:00:00Z",
-    "tag_ids": [
-        "2",
-        "3"
-    ],
-    "follower_ids": [
-        "2",
-        "3"
-    ],
-    "is_visible": true,
-    "is_archived": false,
-  }'
+response: 200 OK -- Item Updated
 ```
 
 #### Delete Item
@@ -426,8 +276,7 @@ curl --location --request DELETE 'http://localhost:8080/items/1'
 ```
 
 ```bash
-response: 200 OK
---data-response '"item:1"'
+response: 200 OK -- Item:id Deleted
 ```
 
 ## Testing
