@@ -12,7 +12,7 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 - [x] Get all Users
 - [ ] Get List of Users by parameters
-- [ ] Get List of Users by IDs Array
+- [x] Get List of Users by IDs Array
 - [x] Create User
 - [x] Read User
 - [x] Update User
@@ -20,7 +20,7 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 - [x] Get all Items
 - [ ] Get List of Items by parameters
-- [ ] Get List of Items by IDs Array
+- [x] Get List of Items by IDs Array
 - [x] Create Item
 - [x] Read Item
 - [x] Update Item

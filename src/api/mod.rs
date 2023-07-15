@@ -10,6 +10,7 @@ pub fn config(conf: &mut web::ServiceConfig) {
       .service(item_api::get_items)
       .service(item_api::update_item)
       .service(item_api::delete_item)
+      .service(item_api::search_items_by_ids)
       .service(user_api::create_user)
       .service(user_api::get_user)
       .service(user_api::get_users)

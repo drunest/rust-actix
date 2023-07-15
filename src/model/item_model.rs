@@ -137,21 +137,6 @@ impl From<ItemPatch> for Value {
 
 impl Patchable for ItemPatch {}
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct IdsArray {
-    ids: Array,
-}
-
-impl From<IdsArray> for Value {
-    fn from(val: IdsArray) -> Self {
-        let mut value = BTreeMap::new();
-
-        value.insert("ids".into(), val.ids.into());
-
-        Value::from(value)
-    }
-}
-
 pub struct ItemBMC;
 
 impl ItemBMC {
@@ -167,11 +152,14 @@ impl ItemBMC {
     array.into_iter().map(|value| W(value).try_into()).collect()
   }
 
-  pub async fn search_by_ids(db: Data<SurrealDBRepo>, ids: IdsArray) -> Result<Vec<Object>, Error> {
-    let ast = "SELECT * FROM item WHERE id IN $ids;";
+  pub async fn search_by_ids(db: Data<SurrealDBRepo>, ids: Vec<&str>) -> Result<Vec<Object>, Error> {
+    let ast = "SELECT * FROM item WHERE id INSIDE $ids;";
 
-    let vars: BTreeMap<String, Value> = map!["ids".into() => Value::from(ids)];
+    let ids: Vec<String> = ids.iter().map(|id| format!("item:{}", id)).collect();
+    let ids_slice: Vec<&str> = ids.iter().map(|id| id.as_str()).collect();
 
+    let vars: BTreeMap<String, Value> = map!["ids".into() => ids_slice.into()];
+    
     let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
 
     let first_res = res.into_iter().next().expect("Did not get a response");

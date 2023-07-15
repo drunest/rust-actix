@@ -4,8 +4,9 @@ use actix_web::{
     web::{Data, Json, Path},
     HttpResponse,
 };
+use serde::Deserialize;
 
-use crate::model::user_model::{User, UserBMC, UserPatch, IdsArray};
+use crate::model::user_model::{User, UserBMC, UserPatch};
 use crate::repository::surrealdb_repo::SurrealDBRepo;
 
 #[post("/users")]
@@ -110,13 +111,18 @@ pub async fn get_users(db: Data<SurrealDBRepo>) -> HttpResponse {
     }
 }
 
-#[get("/usersByIds")]
-pub async fn search_users_by_ids(db: Data<SurrealDBRepo>, array_ids: Json<IdsArray>) -> HttpResponse {
-    let array_ids = array_ids.into_inner();
-    let result = UserBMC::search_by_ids(db, array_ids).await;
+#[derive(Deserialize)]
+pub struct SearchUsersByIds {
+  ids: Vec<String>,
+}
 
-    match result {
-        Ok(users) => HttpResponse::Ok().json(users),
-        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-    }
+#[get("/usersByIds")]
+pub async fn search_users_by_ids(db: Data<SurrealDBRepo>, search_params: Json<SearchUsersByIds>) -> HttpResponse {
+  let array_ids = search_params.ids.iter().map(|c| c.as_str()).collect();
+  let result = UserBMC::search_by_ids(db, array_ids).await;
+
+  match result {
+    Ok(users) => HttpResponse::Ok().json(users),
+    Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+  }
 }
