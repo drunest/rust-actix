@@ -10,21 +10,20 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 ## Project Features
 
-- [x] Get all Users
-- [ ] Get List of Users by parameters
+- [x] CRUD Users
 - [x] Get List of Users by IDs Array
-- [x] Create User
-- [x] Read User
-- [x] Update User
-- [x] Delete User
+- [ ] Get List of Users by parameters
 
-- [x] Get all Items
-- [ ] Get List of Items by parameters
+- [x] CRUD Items
 - [x] Get List of Items by IDs Array
-- [x] Create Item
-- [x] Read Item
-- [x] Update Item
-- [x] Delete Item
+- [ ] Get List of Items by parameters
+
+- [ ] Add Guards to Routes
+- [ ] Add Authentication
+- [ ] Add Authorization
+
+- [ ] Add Tests
+- [ ] Add Documentation
 
 ## Project Dependencies
 
@@ -108,6 +107,26 @@ curl --location --request GET 'http://localhost:8080/users'
 ```bash
 response: 200 OK -- Users List
 ```
+
+#### Get Users by IDs Array
+
+```bash
+curl --location --request GET 'http://localhost:8080/usersByIds'
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "ids": [
+        "1",
+        "2",
+        "3"
+    ]
+}'
+```
+
+```bash
+response: 200 OK -- Users List
+```
+
+```bash
 
 #### Create User
 
@@ -193,6 +212,24 @@ response: 200 OK -- User:id Deleted
 
 ```bash
 curl --location --request GET 'http://localhost:8080/items'
+```
+
+```bash
+response: 200 OK -- Items List
+```
+
+#### Get Items by IDs Array
+
+```bash
+curl --location --request GET 'http://localhost:8080/itemsByIds'
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "ids": [
+        "1",
+        "2",
+        "3"
+    ]
+}'
 ```
 
 ```bash
