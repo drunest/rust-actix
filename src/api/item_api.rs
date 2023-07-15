@@ -125,3 +125,22 @@ pub async fn search_items_by_ids(db: Data<SurrealDBRepo>, search_params: Json<Se
     Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
   }
 }
+
+#[derive(Deserialize)]
+pub struct SearchItemsBy {
+  key: String,
+  value: String,
+}
+
+#[get("/itemsBy")]
+pub async fn search_items_by(db: Data<SurrealDBRepo>, search_params: Json<SearchItemsBy>) -> HttpResponse {
+  let key = search_params.key.to_owned();
+  let value = search_params.value.to_owned();
+
+  let result = ItemBMC::search_by(db, &key, &value).await;
+
+  match result {
+    Ok(items) => HttpResponse::Ok().json(items),
+    Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+  }
+}

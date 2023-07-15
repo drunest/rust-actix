@@ -11,12 +11,14 @@ pub fn config(conf: &mut web::ServiceConfig) {
       .service(item_api::update_item)
       .service(item_api::delete_item)
       .service(item_api::search_items_by_ids)
+      .service(item_api::search_items_by)
       .service(user_api::create_user)
       .service(user_api::get_user)
       .service(user_api::get_users)
       .service(user_api::update_user)
       .service(user_api::delete_user)
-      .service(user_api::search_users_by_ids);
+      .service(user_api::search_users_by_ids)
+      .service(user_api::search_users_by);
 
   conf.service(scope);
 }

@@ -5,6 +5,7 @@ use actix_web::{
     HttpResponse,
 };
 use serde::Deserialize;
+use surrealdb::sql::Value;
 
 use crate::model::user_model::{User, UserBMC, UserPatch};
 use crate::repository::surrealdb_repo::SurrealDBRepo;
@@ -120,6 +121,23 @@ pub struct SearchUsersByIds {
 pub async fn search_users_by_ids(db: Data<SurrealDBRepo>, search_params: Json<SearchUsersByIds>) -> HttpResponse {
   let array_ids = search_params.ids.iter().map(|c| c.as_str()).collect();
   let result = UserBMC::search_by_ids(db, array_ids).await;
+
+  match result {
+    Ok(users) => HttpResponse::Ok().json(users),
+    Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+  }
+}
+
+#[derive(Deserialize)]
+pub struct SearchUsersBy {
+  param: (String, Value),
+}
+
+#[get("/usersBy")]
+pub async fn search_users_by(db: Data<SurrealDBRepo>, search_params: Json<SearchUsersBy>) -> HttpResponse {
+  let value = search_params.param.to_owned();
+
+  let result = UserBMC::search_by(db, value).await;
 
   match result {
     Ok(users) => HttpResponse::Ok().json(users),
