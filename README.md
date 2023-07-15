@@ -126,8 +126,6 @@ curl --location --request GET 'http://localhost:8080/usersByIds'
 response: 200 OK -- Users List
 ```
 
-```bash
-
 #### Create User
 
 ```bash
