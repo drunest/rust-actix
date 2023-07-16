@@ -141,9 +141,10 @@ pub async fn search_users_by(
     db: Data<SurrealDBRepo>,
     search_params: Json<SearchUsersBy>,
 ) -> HttpResponse {
-    let value = search_params.param.to_owned();
+    let key = search_params.param.0.to_owned();
+    let value = search_params.param.1.to_owned();
 
-    let result = UserBMC::search_by(db, value).await;
+    let result = UserBMC::search_by(db, &key, value).await;
 
     match result {
         Ok(users) => HttpResponse::Ok().json(users),

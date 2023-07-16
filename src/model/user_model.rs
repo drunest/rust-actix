@@ -175,12 +175,12 @@ impl UserBMC {
 
     pub async fn search_by(
         db: Data<SurrealDBRepo>,
-        search: (String, JsonValue),
+        tk: &str,
+        value: JsonValue,
     ) -> Result<Vec<Object>, Error> {
-        let ast = "SELECT * FROM user WHERE $key = $value;";
+        let ast = "SELECT * FROM user WHERE $tk = false;";
 
-        let key = search.0.clone();
-        let value = match search.1 {
+        let value = match value {
             serde_json::Value::Null => panic!("Null value not allowed"),
             serde_json::Value::Bool(v) => Value::from(v),
             serde_json::Value::String(v) => Value::from(v),
@@ -188,10 +188,10 @@ impl UserBMC {
         };
 
         let vars: BTreeMap<String, Value> =
-            map!["key".into() => key.into(), "value".into() => value.into()];
+            map!["tk".into() => tk.into(), "value".into() => value.into()];
         println!("{:?}", vars);
 
-        let res = db.ds.execute(ast, &db.ses, Some(vars), false).await?;
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
         println!("{:?}", res);
 
         let first_res = res.into_iter().next().expect("Did not get a response");
