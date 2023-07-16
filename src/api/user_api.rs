@@ -65,18 +65,18 @@ pub async fn update_user(
     };
 
     let data = UserPatch {
-      cid: user_patch.cid.to_owned(),
-      public_key: user_patch.public_key.to_owned(),
-      private_key: user_patch.private_key.to_owned(),
-      name: user_patch.name.to_owned(),
-      version: user_patch.version.to_owned(),
-      avatar: user_patch.avatar.to_owned(),
-      email: user_patch.email.to_owned(),
-      creation_date: user_patch.creation_date.to_owned(),
-      online_state: user_patch.online_state.to_owned(),
-      follow_ids: user_patch.follow_ids.to_owned(),
-      is_visible: user_patch.is_visible.to_owned(),
-      is_inactive: user_patch.is_inactive.to_owned(),
+        cid: user_patch.cid.to_owned(),
+        public_key: user_patch.public_key.to_owned(),
+        private_key: user_patch.private_key.to_owned(),
+        name: user_patch.name.to_owned(),
+        version: user_patch.version.to_owned(),
+        avatar: user_patch.avatar.to_owned(),
+        email: user_patch.email.to_owned(),
+        creation_date: user_patch.creation_date.to_owned(),
+        online_state: user_patch.online_state.to_owned(),
+        follow_ids: user_patch.follow_ids.to_owned(),
+        is_visible: user_patch.is_visible.to_owned(),
+        is_inactive: user_patch.is_inactive.to_owned(),
     };
 
     let update_result = UserBMC::update(db, &id, data).await;
@@ -114,33 +114,39 @@ pub async fn get_users(db: Data<SurrealDBRepo>) -> HttpResponse {
 
 #[derive(Deserialize)]
 pub struct SearchUsersByIds {
-  ids: Vec<String>,
+    ids: Vec<String>,
 }
 
 #[get("/usersByIds")]
-pub async fn search_users_by_ids(db: Data<SurrealDBRepo>, search_params: Json<SearchUsersByIds>) -> HttpResponse {
-  let array_ids = search_params.ids.iter().map(|c| c.as_str()).collect();
-  let result = UserBMC::search_by_ids(db, array_ids).await;
+pub async fn search_users_by_ids(
+    db: Data<SurrealDBRepo>,
+    search_params: Json<SearchUsersByIds>,
+) -> HttpResponse {
+    let array_ids = search_params.ids.iter().map(|c| c.as_str()).collect();
+    let result = UserBMC::search_by_ids(db, array_ids).await;
 
-  match result {
-    Ok(users) => HttpResponse::Ok().json(users),
-    Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-  }
+    match result {
+        Ok(users) => HttpResponse::Ok().json(users),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }
 
 #[derive(Deserialize)]
 pub struct SearchUsersBy {
-  param: (String, Value),
+    param: (String, Value),
 }
 
 #[get("/usersBy")]
-pub async fn search_users_by(db: Data<SurrealDBRepo>, search_params: Json<SearchUsersBy>) -> HttpResponse {
-  let value = search_params.param.to_owned();
+pub async fn search_users_by(
+    db: Data<SurrealDBRepo>,
+    search_params: Json<SearchUsersBy>,
+) -> HttpResponse {
+    let value = search_params.param.to_owned();
 
-  let result = UserBMC::search_by(db, value).await;
+    let result = UserBMC::search_by(db, value).await;
 
-  match result {
-    Ok(users) => HttpResponse::Ok().json(users),
-    Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-  }
+    match result {
+        Ok(users) => HttpResponse::Ok().json(users),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }

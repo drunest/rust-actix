@@ -173,25 +173,26 @@ impl UserBMC {
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 
-    pub async fn search_by(db: Data<SurrealDBRepo>, search: (String, JsonValue)) -> Result<Vec<Object>, Error> {
+    pub async fn search_by(
+        db: Data<SurrealDBRepo>,
+        search: (String, JsonValue),
+    ) -> Result<Vec<Object>, Error> {
         let ast = "SELECT * FROM user WHERE $key = $value;";
 
         let key = search.0.clone();
         let value = match search.1 {
-          serde_json::Value::Null => panic!("Null value not allowed"),
-          serde_json::Value::Bool(v) => Value::from(v),
-          serde_json::Value::String(v) => Value::from(v),
-          serde_json::Value::Array(v) => {
-            let array = Value::Array(v.into_iter().map(Value::from).collect());
-            Value::from(array)
-          },
-          _ => panic!("Invalid value type"),
+            serde_json::Value::Null => panic!("Null value not allowed"),
+            serde_json::Value::Bool(v) => Value::from(v),
+            serde_json::Value::String(v) => Value::from(v),
+            _ => panic!("Invalid value type"),
         };
 
-        let vars: BTreeMap<String, Value> = map!["key".into() => key.into(), "value".into() => value];
+        let vars: BTreeMap<String, Value> =
+            map!["key".into() => key.into(), "value".into() => value.into()];
+        println!("{:?}", vars);
 
-        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
-        println!("res: {:?}", res);
+        let res = db.ds.execute(ast, &db.ses, Some(vars), false).await?;
+        println!("{:?}", res);
 
         let first_res = res.into_iter().next().expect("Did not get a response");
 
