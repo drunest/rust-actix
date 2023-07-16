@@ -1,5 +1,6 @@
 use actix_web::web::Data;
 use serde::{Deserialize, Serialize};
+use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use surrealdb::sql::{thing, Array, Object, Value};
 
@@ -172,13 +173,25 @@ impl UserBMC {
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 
-    pub async fn search_by(db: Data<SurrealDBRepo>, search: (String, Value)) -> Result<Vec<Object>, Error> {
+    pub async fn search_by(db: Data<SurrealDBRepo>, search: (String, JsonValue)) -> Result<Vec<Object>, Error> {
         let ast = "SELECT * FROM user WHERE $key = $value;";
-        println!("search: {:?}", search);
 
-        let vars: BTreeMap<String, Value> = map!["key".into() => search.0.into(), "value".into() => search.1];
+        let key = search.0.clone();
+        let value = match search.1 {
+          serde_json::Value::Null => panic!("Null value not allowed"),
+          serde_json::Value::Bool(v) => Value::from(v),
+          serde_json::Value::String(v) => Value::from(v),
+          serde_json::Value::Array(v) => {
+            let array = Value::Array(v.into_iter().map(Value::from).collect());
+            Value::from(array)
+          },
+          _ => panic!("Invalid value type"),
+        };
+
+        let vars: BTreeMap<String, Value> = map!["key".into() => key.into(), "value".into() => value];
 
         let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+        println!("res: {:?}", res);
 
         let first_res = res.into_iter().next().expect("Did not get a response");
 

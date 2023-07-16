@@ -5,7 +5,7 @@ use actix_web::{
     HttpResponse,
 };
 use serde::Deserialize;
-use surrealdb::sql::Value;
+use serde_json::Value;
 
 use crate::model::user_model::{User, UserBMC, UserPatch};
 use crate::repository::surrealdb_repo::SurrealDBRepo;
