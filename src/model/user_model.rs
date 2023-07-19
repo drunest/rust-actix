@@ -172,10 +172,24 @@ impl UserBMC {
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 
-    pub async fn search_by_name(
+    pub async fn search_by_public_key(
         db: Data<SurrealDBRepo>,
-        name: &str,
+        public_key: &str,
     ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM user WHERE publicKey = $public_key;";
+
+        let vars: BTreeMap<String, Value> = map!["public_key".into() => public_key.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_name(db: Data<SurrealDBRepo>, name: &str) -> Result<Vec<Object>, Error> {
         let ast = "SELECT * FROM user WHERE name CONTAINS $name;";
 
         let vars: BTreeMap<String, Value> = map!["name".into() => name.into()];
