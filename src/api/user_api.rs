@@ -144,7 +144,11 @@ pub async fn search_users_by(
     let key = search_params.param.0.to_owned();
     let value = search_params.param.1.to_owned();
 
-    let result = UserBMC::search_by(db, &key, value).await;
+    let result = match key.as_str() {
+      "name" => UserBMC::search_by_name(db, &value.as_str().unwrap_or("")).await,
+      "isInactive" => UserBMC::search_by_is_inactive(db, value.as_bool().unwrap_or(false)).await,
+      _ => panic!("Invalid key"),
+    };
 
     match result {
         Ok(users) => HttpResponse::Ok().json(users),

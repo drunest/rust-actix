@@ -1,6 +1,5 @@
 use actix_web::web::Data;
 use serde::{Deserialize, Serialize};
-use serde_json::Value as JsonValue;
 use std::collections::BTreeMap;
 use surrealdb::sql::{thing, Array, Object, Value};
 
@@ -177,7 +176,7 @@ impl UserBMC {
         db: Data<SurrealDBRepo>,
         name: &str,
     ) -> Result<Vec<Object>, Error> {
-        let ast = "SELECT * FROM user WHERE name LIKE $name;";
+        let ast = "SELECT * FROM user WHERE name CONTAINS $name;";
 
         let vars: BTreeMap<String, Value> = map!["name".into() => name.into()];
 
