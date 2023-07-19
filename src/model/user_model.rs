@@ -173,26 +173,32 @@ impl UserBMC {
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 
-    pub async fn search_by(
+    pub async fn search_by_name(
         db: Data<SurrealDBRepo>,
-        tk: &str,
-        value: JsonValue,
+        name: &str,
     ) -> Result<Vec<Object>, Error> {
-        let ast = "SELECT * FROM user WHERE $tk = false;";
+        let ast = "SELECT * FROM user WHERE name LIKE $name;";
 
-        let value = match value {
-            serde_json::Value::Null => panic!("Null value not allowed"),
-            serde_json::Value::Bool(v) => Value::from(v),
-            serde_json::Value::String(v) => Value::from(v),
-            _ => panic!("Invalid value type"),
-        };
-
-        let vars: BTreeMap<String, Value> =
-            map!["tk".into() => tk.into(), "value".into() => value.into()];
-        println!("{:?}", vars);
+        let vars: BTreeMap<String, Value> = map!["name".into() => name.into()];
 
         let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
-        println!("{:?}", res);
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_is_inactive(
+        db: Data<SurrealDBRepo>,
+        is_inactive: bool,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM user WHERE isInactive = $is_inactive;";
+
+        let vars: BTreeMap<String, Value> = map!["is_inactive".into() => is_inactive.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
 
         let first_res = res.into_iter().next().expect("Did not get a response");
 
