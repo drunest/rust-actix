@@ -1,4 +1,4 @@
-use actix_web::{web::Data, App, HttpServer};
+use actix_web::{guard, web, App, HttpServer, HttpResponse};
 
 mod api;
 mod error;
@@ -22,12 +22,20 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
-    let db_data = Data::new(surreal);
+    let db_data = web::Data::new(surreal);
 
     HttpServer::new(move || {
         App::new()
             .app_data(db_data.clone())
             .configure(api::config)
+            .service(
+              web::resource("/api").route(
+                web::route()
+                  .guard(guard::Get())
+                  .guard(guard::Header("content-type", "application/json"))
+                  .to(|| HttpResponse::Ok())
+              )
+            )
     })
     .bind(("127.0.0.1", 8080))?
     .run()

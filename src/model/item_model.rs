@@ -172,17 +172,10 @@ impl ItemBMC {
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 
-    pub async fn search_by(
-        db: Data<SurrealDBRepo>,
-        key: &str,
-        value: &str,
-    ) -> Result<Vec<Object>, Error> {
-        let ast = "SELECT * FROM item WHERE $key = $value;";
+    pub async fn search_by_name(db: Data<SurrealDBRepo>, name: &str) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE name CONTAINS $name;";
 
-        let vars: BTreeMap<String, Value> = map![
-          "key".into() => key.into(),
-          "value".into() => value.into()
-        ];
+        let vars: BTreeMap<String, Value> = map!["name".into() => name.into()];
 
         let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
 
@@ -190,6 +183,129 @@ impl ItemBMC {
 
         let array: Array = W(first_res.result?).try_into()?;
 
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_owner_id(
+        db: Data<SurrealDBRepo>,
+        owner_id: &str,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE ownerId = $owner_id;";
+
+        let vars: BTreeMap<String, Value> = map!["owner_id".into() => owner_id.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_creation_date(
+        db: Data<SurrealDBRepo>,
+        creation_date: &str,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE creationDate = $creation_date;";
+
+        let vars: BTreeMap<String, Value> = map!["creation_date".into() => creation_date.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_edition_date(
+        db: Data<SurrealDBRepo>,
+        edition_date: &str,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE editionDate = $edition_date;";
+
+        let vars: BTreeMap<String, Value> = map!["edition_date".into() => edition_date.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_tag_ids(
+        db: Data<SurrealDBRepo>,
+        tag_ids: Vec<&str>,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE tagIds INSIDE $ids;";
+
+        let ids: Vec<String> = tag_ids.iter().map(|id| format!("item:{}", id)).collect();
+        let ids_slice: Vec<&str> = ids.iter().map(|id| id.as_str()).collect();
+
+        let vars: BTreeMap<String, Value> = map!["ids".into() => ids_slice.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_follower_ids(
+        db: Data<SurrealDBRepo>,
+        follower_ids: Vec<&str>,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE followerIds INSIDE $ids;";
+
+        let ids: Vec<String> = follower_ids.iter().map(|id| format!("item:{}", id)).collect();
+        let ids_slice: Vec<&str> = ids.iter().map(|id| id.as_str()).collect();
+
+        let vars: BTreeMap<String, Value> = map!["ids".into() => ids_slice.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_is_visible(
+        db: Data<SurrealDBRepo>,
+        is_visible: bool,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE isVisible = $is_visible;";
+
+        let vars: BTreeMap<String, Value> = map!["is_visible".into() => is_visible.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+
+        let array: Array = W(first_res.result?).try_into()?;
+
+        array.into_iter().map(|value| W(value).try_into()).collect()
+    }
+
+    pub async fn search_by_is_archived(
+        db: Data<SurrealDBRepo>,
+        is_archived: bool,
+    ) -> Result<Vec<Object>, Error> {
+        let ast = "SELECT * FROM item WHERE isArchived = $is_archived;";
+
+        let vars: BTreeMap<String, Value> = map!["is_archived".into() => is_archived.into()];
+
+        let res = db.ds.execute(ast, &db.ses, Some(vars), true).await?;
+
+        let first_res = res.into_iter().next().expect("Did not get a response");
+        let array: Array = W(first_res.result?).try_into()?;
         array.into_iter().map(|value| W(value).try_into()).collect()
     }
 

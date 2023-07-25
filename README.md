@@ -12,11 +12,11 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 - [x] CRUD Users
 - [x] Get List of Users by IDs Array
-- [ ] Get List of Users by parameters
+- [x] Get List of Users by parameters
 
 - [x] CRUD Items
 - [x] Get List of Items by IDs Array
-- [ ] Get List of Items by parameters
+- [x] Get List of Items by parameters
 
 - [ ] Add Guards to Routes
 - [ ] Add Authentication
@@ -126,6 +126,22 @@ curl --location --request GET 'http://localhost:8080/usersByIds'
 response: 200 OK -- Users List
 ```
 
+#### Get Users by parameters
+
+```bash
+curl --location --request GET 'http://localhost:8080/usersBy'
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "param": [
+      "name": "John Doe",
+    ]
+}'
+```
+
+```bash
+response: 200 OK -- Users List
+```
+
 #### Create User
 
 ```bash
@@ -226,6 +242,22 @@ curl --location --request GET 'http://localhost:8080/itemsByIds'
         "1",
         "2",
         "3"
+    ]
+}'
+```
+
+```bash
+response: 200 OK -- Items List
+```
+
+#### Get Items by parameters
+
+```bash
+curl --location --request GET 'http://localhost:8080/itemsBy'
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "param": [
+      "name": "Item 1",
     ]
 }'
 ```
