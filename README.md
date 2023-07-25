@@ -11,12 +11,7 @@ It is a simple API that allows users to create, read, update, and delete users a
 ## Project Features
 
 - [x] CRUD Users
-- [x] Get List of Users by IDs Array
-- [x] Get List of Users by parameters
-
 - [x] CRUD Items
-- [x] Get List of Items by IDs Array
-- [x] Get List of Items by parameters
 
 - [ ] Add Guards to Routes
 - [ ] Add Authentication
@@ -32,6 +27,7 @@ It is a simple API that allows users to create, read, update, and delete users a
 surrealdb = "=1.0.0-beta.8"
 actix-web = "4"
 serde = { version = "1.0.171", features = ["derive"]}
+serde_json = "1.0.103"
 dotenv = "0.15.0"
 futures = "0.3"
 thiserror = "1"
