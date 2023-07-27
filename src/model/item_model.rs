@@ -263,7 +263,10 @@ impl ItemBMC {
     ) -> Result<Vec<Object>, Error> {
         let ast = "SELECT * FROM item WHERE followerIds INSIDE $ids;";
 
-        let ids: Vec<String> = follower_ids.iter().map(|id| format!("item:{}", id)).collect();
+        let ids: Vec<String> = follower_ids
+            .iter()
+            .map(|id| format!("item:{}", id))
+            .collect();
         let ids_slice: Vec<&str> = ids.iter().map(|id| id.as_str()).collect();
 
         let vars: BTreeMap<String, Value> = map!["ids".into() => ids_slice.into()];

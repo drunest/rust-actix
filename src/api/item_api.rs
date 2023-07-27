@@ -132,7 +132,7 @@ pub async fn search_items_by_ids(
 
 #[derive(Deserialize)]
 pub struct SearchItemsBy {
-  param: (String, Value),
+    param: (String, Value),
 }
 
 #[get("/itemsBy")]
@@ -144,27 +144,31 @@ pub async fn search_items_by(
     let value = search_params.param.1.to_owned();
 
     let result = match key.as_str() {
-      "name" => ItemBMC::search_by_name(db, &value.as_str().unwrap_or("")).await,
-      "ownerId" => ItemBMC::search_by_owner_id(db, &value.as_str().unwrap_or("")).await,
-      "creationDate" => ItemBMC::search_by_creation_date(db, &value.as_str().unwrap_or("")).await,
-      "editionDate" => ItemBMC::search_by_edition_date(db, &value.as_str().unwrap_or("")).await,
-      "tagIds" => {
-        let tag_ids = match &value {
-          serde_json::Value::Array(arr) => arr.iter().map(|c| c.as_str().unwrap_or("")).collect(),
-          _ => Vec::new(),
-        };
-        ItemBMC::search_by_tag_ids(db, tag_ids).await
-      },
-      "followerIds" => {
-        let follower_ids = match &value {
-          serde_json::Value::Array(arr) => arr.iter().map(|c| c.as_str().unwrap_or("")).collect(),
-          _ => Vec::new(),
-        };
-        ItemBMC::search_by_follower_ids(db, follower_ids).await
-      },
-      "isVisible" => ItemBMC::search_by_is_visible(db, value.as_bool().unwrap_or(false)).await,
-      "isArchived" => ItemBMC::search_by_is_archived(db, value.as_bool().unwrap_or(false)).await,
-      _ => panic!("Invalid key"),
+        "name" => ItemBMC::search_by_name(db, &value.as_str().unwrap_or("")).await,
+        "ownerId" => ItemBMC::search_by_owner_id(db, &value.as_str().unwrap_or("")).await,
+        "creationDate" => ItemBMC::search_by_creation_date(db, &value.as_str().unwrap_or("")).await,
+        "editionDate" => ItemBMC::search_by_edition_date(db, &value.as_str().unwrap_or("")).await,
+        "tagIds" => {
+            let tag_ids = match &value {
+                serde_json::Value::Array(arr) => {
+                    arr.iter().map(|c| c.as_str().unwrap_or("")).collect()
+                }
+                _ => Vec::new(),
+            };
+            ItemBMC::search_by_tag_ids(db, tag_ids).await
+        }
+        "followerIds" => {
+            let follower_ids = match &value {
+                serde_json::Value::Array(arr) => {
+                    arr.iter().map(|c| c.as_str().unwrap_or("")).collect()
+                }
+                _ => Vec::new(),
+            };
+            ItemBMC::search_by_follower_ids(db, follower_ids).await
+        }
+        "isVisible" => ItemBMC::search_by_is_visible(db, value.as_bool().unwrap_or(false)).await,
+        "isArchived" => ItemBMC::search_by_is_archived(db, value.as_bool().unwrap_or(false)).await,
+        _ => panic!("Invalid key"),
     };
 
     match result {

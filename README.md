@@ -12,8 +12,9 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 - [x] CRUD Users
 - [x] CRUD Items
+- [x] Add Guards to Routes
+- [x] Add Logger
 
-- [ ] Add Guards to Routes
 - [ ] Add Authentication
 - [ ] Add Authorization
 
@@ -31,6 +32,7 @@ serde_json = "1.0.103"
 dotenv = "0.15.0"
 futures = "0.3"
 thiserror = "1"
+env_logger = "0.10.0"
 ```
 
 ## Project Structure
