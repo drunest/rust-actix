@@ -4,6 +4,9 @@ use surrealdb::{sql::Value, kvs::Datastore, Error, dbs::Session};
 pub trait Creatable: Into<Value> {}
 pub trait Patchable: Into<Value> {}
 
+// https://github.dev/ixhbinphoenix/bne
+// https://github.com/ixhbinphoenix/actix-session-surrealdb
+
 #[derive(Clone)]
 pub struct SurrealDBRepo {
     pub ds: Arc<Datastore>,
