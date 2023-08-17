@@ -38,8 +38,8 @@ It is a simple API that allows users to create, read, update, and delete users a
 ```toml
 [dependencies]
 surrealdb = "1.0.0-beta.9"
-actix-web = "4"
-serde = { version = "1.0.171", features = ["derive"]}
+actix-web = { version = "4.2.1", features = ["rustls"] }
+serde = { version = "1.0.177", features = ["derive"]}
 serde_json = "1.0.103"
 dotenv = "0.15.0"
 futures = "0.3"
