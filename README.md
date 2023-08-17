@@ -14,9 +14,21 @@ It is a simple API that allows users to create, read, update, and delete users a
 - [x] CRUD Items
 - [x] Add Guards to Routes
 - [x] Add Logger
+- [x] Add Error Handling
 
+- [ ] Update SurrealDB to 1.0.0-beta.9
 - [ ] Add Authentication
 - [ ] Add Authorization
+- [ ] Add Governor
+- [ ] Add Caching
+- [ ] Add Rate Limiting
+- [ ] Add Pagination
+- [ ] Add Sorting
+- [ ] Add Filtering
+- [ ] Add Search
+- [ ] Add WebSockets
+- [ ] Add GraphQL
+- [ ] Add OpenAPI
 
 - [ ] Add Tests
 - [ ] Add Documentation
@@ -25,7 +37,7 @@ It is a simple API that allows users to create, read, update, and delete users a
 
 ```toml
 [dependencies]
-surrealdb = "=1.0.0-beta.8"
+surrealdb = "1.0.0-beta.9"
 actix-web = "4"
 serde = { version = "1.0.171", features = ["derive"]}
 serde_json = "1.0.103"
