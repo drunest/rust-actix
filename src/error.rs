@@ -5,6 +5,9 @@ pub enum Error {
     #[error("Fail to get Ctx")]
     CtxFail,
 
+    #[error("Fetching from Untis failed")]
+    UntisError,
+
     #[error("Value not of type '{0}'")]
     XValueNotOfType(&'static str),
 
@@ -19,4 +22,10 @@ pub enum Error {
 
     #[error(transparent)]
     IO(#[from] std::io::Error),
+
+    #[error(transparent)]
+    JSON(#[from] serde_json::Error),
+
+    #[error(transparent)]
+    Actix(#[from] actix_web::Error),
 }

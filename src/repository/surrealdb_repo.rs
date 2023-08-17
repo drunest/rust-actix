@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use surrealdb::{sql::Value, Datastore, Error, Session};
+use surrealdb::{sql::Value, kvs::Datastore, Error, dbs::Session};
 
 pub trait Creatable: Into<Value> {}
 pub trait Patchable: Into<Value> {}
