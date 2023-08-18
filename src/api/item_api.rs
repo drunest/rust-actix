@@ -85,6 +85,7 @@ pub async fn update_item(
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
+
 #[delete("/items/{id}")]
 pub async fn delete_item(db: Data<SurrealDBRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
