@@ -9,8 +9,8 @@ edition = "2021"
 surrealdb = "=1.0.0-beta.8"
 actix-web = { version = "4.4.1", features = ["rustls"] }
 serde = { version = "1.0.192", features = ["derive"]}
-serde_json = "1.0.107"
+serde_json = "1.0.109"
 dotenv = "0.15.0"
 futures = "0.3"
 thiserror = "1"
-env_logger = "0.10.0"
+env_logger = "0.11.1"
